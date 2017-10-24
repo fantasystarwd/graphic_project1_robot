@@ -44,7 +44,9 @@ float limbside = 3;															//length of hand and leg
 static int WinWidth = 600;
 static int WinHeight = 600;
 enum { CYLINDER = 100 };														//used for calllist
-enum { StandBy = 0, Walk, Jump, ChangeColor, Shoot, Destruct, Transform };			//the action name
+enum { StandBy = 0, Walk, Jump, ChangeColor, Shoot, Destruct, Transform };	//the action name
+enum Color { Black, White, Red, Green, Blue };
+Color colorChoose;
 int motivation = 0;															//decide which action
 void head()
 {
@@ -272,6 +274,7 @@ void standby() {
 
 	singleColortest = false;
 	colorR = colorG = colorB = 0;
+	colorChoose = Black;
 
 	bodyxd = 0;
 	bodyyd = 0;
@@ -500,10 +503,31 @@ void jump()
 	leftLegy[1] = 0;
 	leftLegz[1] = 0;
 }
+//finish
 void changeColor()
 {
 	singleColortest = true;
-	colorR = 255;
+	switch (colorChoose)
+	{
+	case White:
+		colorR = colorG = colorB = 255;
+		break;
+	case Black:
+		colorR = colorG = colorB = 0;
+		break;
+	case Red:
+		colorR = 255;
+		colorG = colorB = 0;
+		break;
+	case Green:
+		colorG = 255;
+		colorR = colorB = 0;
+		break;
+	case Blue:
+		colorB = 255;
+		colorR = colorG = 0;
+		break;
+	}
 }
 void shoot()
 {
@@ -675,6 +699,14 @@ void menu(int selection)
 	standby();
 	glutPostRedisplay();
 }
+
+void menuColor(int selection)
+{
+	motivation = ChangeColor;
+	colorChoose = (Color)selection;
+	glutPostRedisplay();
+}
+
 void timerFunction(int value)
 {
 	switch (motivation)
@@ -706,7 +738,7 @@ void timerFunction(int value)
 }
 int main(int argc, char** argv)
 {
-	int main_menu, action_menu, count_menu;
+	int main_menu, action_menu, count_menu, color_menu;
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
@@ -718,11 +750,19 @@ int main(int argc, char** argv)
 	glutCreateWindow(argv[0]);
 
 	init();
+
+	color_menu = glutCreateMenu(menuColor);
+	glutAddMenuEntry("White", White);
+	glutAddMenuEntry("Black", Black);
+	glutAddMenuEntry("Red", Red);
+	glutAddMenuEntry("Green", Green);
+	glutAddMenuEntry("Blue", Blue);
+
 	glutCreateMenu(menu);
 	glutAddMenuEntry("Stand By", StandBy);
 	glutAddMenuEntry("Walk", Walk);
 	glutAddMenuEntry("Jump", Jump);
-	glutAddMenuEntry("Change Color", ChangeColor);
+	glutAddSubMenu("Change Color",color_menu);
 	glutAddMenuEntry("Shoot", Shoot);
 	glutAddMenuEntry("Destruct", Destruct);
 	glutAddMenuEntry("Transform", Transform);
