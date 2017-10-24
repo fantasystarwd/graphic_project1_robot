@@ -24,6 +24,10 @@ float rightHandxd, rightHandyd, rightHandzd;							//move right hand
 float leftLegxd, leftLegyd, leftLegzd;									//move leftleg
 float rightLegxd, rightLegyd, rightLegzd;								//move right leg
 float bodyxd, bodyyd, bodyzd;											//move the body
+
+bool singleColortest;
+int colorR, colorG, colorB;
+
 int old_rot_x = 0;
 int old_rot_y = 0;
 
@@ -39,52 +43,67 @@ float bodyside = 5;															//length of body
 float limbside = 3;															//length of hand and leg
 static int WinWidth = 600;
 static int WinHeight = 600;
-enum {CYLINDER=100};														//used for calllist
-enum {StandBy=0,Walk,Jump,ChangeColor,Shoot,Destruct,Transform};			//the action name
+enum { CYLINDER = 100 };														//used for calllist
+enum { StandBy = 0, Walk, Jump, ChangeColor, Shoot, Destruct, Transform };			//the action name
 int motivation = 0;															//decide which action
 void head()
 {
 	glTranslated(headxd, headyd, headzd);
-	glColor3f(0, 1, 0);
+
+	if (!singleColortest)
+		glColor3f(0, 1, 0);
+	else
+		glColor3ub(colorR, colorG, colorB);
+
 	glutSolidCube(headside);
-	glTranslatef(0,headside*0.75,0);
+	glTranslatef(0, headside*0.75, 0);
 	glScalef(1.2, 0.5, 1.2);
 	glutSolidCube(headside);
 }
 void leftHand()
 {
-		glTranslated(leftHandxd, leftHandyd, leftLegzd);
-    	glTranslatef((bodyside*0.125) + (bodyside / 2) - 0.3, (bodyside / 2) * 3 / 5, 0.0);
+	glTranslated(leftHandxd, leftHandyd, leftLegzd);
+	glTranslatef((bodyside*0.125) + (bodyside / 2) - 0.3, (bodyside / 2) * 3 / 5, 0.0);
 
-		glPushMatrix();														//first ankle
-		glRotatef(90, 0, 1, 0);
-		glCallList(CYLINDER);
-		glPopMatrix();
-		
-		glRotatef(leftHanda[0], leftHandx[0], leftHandy[0], leftHandz[0]);
-		glTranslatef(0.3 + limbside*0.8 / 2, -limbside / 2, 0);
-		
-		glPushMatrix();														//upper lefthand
-		glScalef(0.8, 2, 1);
+	glPushMatrix();														//first ankle
+	glRotatef(90, 0, 1, 0);
+	glCallList(CYLINDER);
+	glPopMatrix();
+
+	glRotatef(leftHanda[0], leftHandx[0], leftHandy[0], leftHandz[0]);
+	glTranslatef(0.3 + limbside*0.8 / 2, -limbside / 2, 0);
+
+	glPushMatrix();														//upper lefthand
+	glScalef(0.8, 2, 1);
+
+	if (!singleColortest)
 		glColor3ub(255, 177, 98);
-		glutSolidCube(limbside);
-		glPopMatrix();
+	else
+		glColor3ub(colorR, colorG, colorB);
 
-		glTranslatef(-0.3 - limbside*0.8 / 2, -limbside * 3 / 4, 0);
-		glRotatef(leftHanda[1], leftHandx[1], leftHandy[1], leftHandz[1]);
+	glutSolidCube(limbside);
+	glPopMatrix();
 
-		glPushMatrix();														//second ankle
-		glRotatef(90, 0, 1, 0);
-		glCallList(CYLINDER);
-		glPopMatrix();
+	glTranslatef(-0.3 - limbside*0.8 / 2, -limbside * 3 / 4, 0);
+	glRotatef(leftHanda[1], leftHandx[1], leftHandy[1], leftHandz[1]);
 
-		glTranslatef(0.3 + limbside*0.8 / 2, -limbside / 2, 0.0);
+	glPushMatrix();														//second ankle
+	glRotatef(90, 0, 1, 0);
+	glCallList(CYLINDER);
+	glPopMatrix();
 
-		glPushMatrix();														//lower lefthand
-		glScalef(0.9, 2, 1.1);
+	glTranslatef(0.3 + limbside*0.8 / 2, -limbside / 2, 0.0);
+
+	glPushMatrix();														//lower lefthand
+	glScalef(0.9, 2, 1.1);
+
+	if (!singleColortest)
 		glColor3ub(89, 197, 255);
-		glutSolidCube(limbside);
-		glPopMatrix();
+	else
+		glColor3ub(colorR, colorG, colorB);
+
+	glutSolidCube(limbside);
+	glPopMatrix();
 }
 void rightHand()
 {
@@ -102,7 +121,10 @@ void rightHand()
 
 	glPushMatrix();														//upper righthand
 	glScalef(0.8, 2, 1);
-	glColor3ub(255, 177, 98);
+	if (!singleColortest)
+		glColor3ub(255, 177, 98);
+	else
+		glColor3ub(colorR, colorG, colorB);
 	glutSolidCube(limbside);
 	glPopMatrix();
 
@@ -119,7 +141,10 @@ void rightHand()
 
 	glPushMatrix();														//lower righthand
 	glScalef(0.9, 2, 1.1);
-	glColor3ub(89, 197, 255);
+	if (!singleColortest)
+		glColor3ub(89, 197, 255);
+	else
+		glColor3ub(colorR, colorG, colorB);
 	glutSolidCube(limbside);
 	glPopMatrix();
 }
@@ -138,7 +163,10 @@ void leftLeg()
 
 	glPushMatrix();														//upper leftleg
 	glScalef(0.8, 2, 1);
-	glColor3ub(255, 177, 98);
+	if (!singleColortest)
+		glColor3ub(255, 177, 98);
+	else
+		glColor3ub(colorR, colorG, colorB);
 	glutSolidCube(limbside);
 	glPopMatrix();
 
@@ -154,13 +182,16 @@ void leftLeg()
 
 	glPushMatrix();														//lower leftleg
 	glScalef(0.9, 2, 1.1);
-	glColor3ub(89, 197, 255);
+	if (!singleColortest)
+		glColor3ub(89, 197, 255);
+	else
+		glColor3ub(colorR, colorG, colorB);
 	glutSolidCube(limbside);
 	glPopMatrix();
 }
 void rightLeg()
 {
-	glTranslated(rightLegxd,rightLegyd,rightLegzd);
+	glTranslated(rightLegxd, rightLegyd, rightLegzd);
 	glTranslatef(0, 1 - bodyside, 0);
 
 	glPushMatrix();														//first ankle
@@ -174,7 +205,10 @@ void rightLeg()
 
 	glPushMatrix();														//upper rightleg
 	glScalef(0.8, 2, 1);
-	glColor3ub(255, 177, 98);
+	if (!singleColortest)
+		glColor3ub(255, 177, 98);
+	else
+		glColor3ub(colorR, colorG, colorB);
 	glutSolidCube(limbside);
 	glPopMatrix();
 
@@ -191,40 +225,54 @@ void rightLeg()
 
 	glPushMatrix();														//lower rightleg
 	glScalef(0.9, 2, 1.1);
-	glColor3ub(89, 197, 255);
+	if (!singleColortest)
+		glColor3ub(89, 197, 255);
+	else
+		glColor3ub(colorR, colorG, colorB);
 	glutSolidCube(limbside);
 	glPopMatrix();
 }
 void body()
-    {
-	 glTranslated(bodyxd, bodyyd, bodyzd);
-	 glPushMatrix();
-	 glScalef(1, 1, 0.5);         //top part
-	 glColor3f(1,0,0);
-	 glutSolidCube(bodyside);
-	 glPopMatrix();
-	 glPushMatrix();
-	 glTranslatef(bodyside*0.625,bodyside/4,0);
-	 glScalef(0.25, 0.5, 0.5);
-	 glColor3f(1, 0, 0);
-	 glutSolidCube(bodyside);
-	 glPopMatrix();
-	 glPushMatrix();
-	 glTranslatef(-bodyside*0.625, bodyside / 4, 0);
-	 glScalef(0.25, 0.5, 0.5);
-	 glColor3f(1, 0, 0);
-	 glutSolidCube(bodyside);
-	 glPopMatrix();
-	 glPushMatrix();
-	 glTranslatef(0, -3.75, 0);
-	 glScalef(0.2, 0.5, 0.5);
-	 glColor3f(1, 0, 0);
-	 glutSolidCube(bodyside);
-	 glPopMatrix();
-    }
+{
+	glTranslated(bodyxd, bodyyd, bodyzd);
+	glPushMatrix();
+	if (!singleColortest)
+		glColor3f(1, 0, 0);
+	else
+		glColor3ub(colorR, colorG, colorB);
+
+	glPushMatrix();
+	glScalef(1, 1, 0.5);         //top part
+	glutSolidCube(bodyside);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(bodyside*0.625, bodyside / 4, 0);
+	glScalef(0.25, 0.5, 0.5);
+	glutSolidCube(bodyside);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-bodyside*0.625, bodyside / 4, 0);
+	glScalef(0.25, 0.5, 0.5);
+	glutSolidCube(bodyside);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, -3.75, 0);
+	glScalef(0.2, 0.5, 0.5);
+	glutSolidCube(bodyside);
+	glPopMatrix();
+
+	glPopMatrix();
+}
 void standby() {
 	state = 1;
 	step = 0;
+
+	singleColortest = false;
+	colorR = colorG = colorB = 0;
+
 	bodyxd = 0;
 	bodyyd = 0;
 	bodyzd = 0;
@@ -237,7 +285,7 @@ void standby() {
 	leftHandx[1] = 1;
 	leftHandy[1] = 0;
 	leftHandz[1] = 0;
-	
+
 	rightHanda[0] = 0;
 	rightHandx[0] = 1;
 	rightHandy[0] = 0;
@@ -267,7 +315,7 @@ void standby() {
 }
 void walk()
 {
-	
+
 	for (int i = 0; i < 30; i++)
 	{
 		if (rightHanda[1] > -30)
@@ -278,60 +326,60 @@ void walk()
 			leftHanda[1]--;
 		}
 	}
-	switch(step)
+	switch (step)
 	{
-	    case 0:
-			bodyyd = -rightLega[0] * (2 - sqrt(3 / 2)) / 30;
-			rightHanda[0]+=2;
-			leftHanda[0]-=2;
-			rightLega[0]++;
-			rightLega[1]=rightLega[0];
-			leftLega[0]-=2;
-			leftLega[1]=-leftLega[0];
-			if(rightLega[0]>=30)
-			  {
-				step = 1;
-			  }
-			break;
-		case 1:
-			bodyyd = -rightLega[0] * (2 - sqrt(3 / 2)) / 30;
-			rightHanda[0]-=2;
-			leftHanda[0]+=2;
-			rightLega[0]--;
-			rightLega[1] = rightLega[0] ;
-			leftLega[0] += 2;
-			leftLega[1] =-leftLega[0];
-			if (rightLega[0] == 0)
-			{
-				step = 2;
-			}
-			break;
-		case 2:
-			bodyyd = -leftLega[0] * (2 - sqrt(3 / 2)) / 30;
-			rightHanda[0]+=2;
-			leftHanda[0]-=2;
-			leftLega[0]++;
-			leftLega[1] = leftLega[0];
-			rightLega[0] -= 2;
-			rightLega[1] =-rightLega[0];
-			if (leftLega[0] >= 30)
-			{
-				step = 3;
-			}
-			break;
-		case 3:
-			bodyyd = -leftLega[0] * (2 - sqrt(3 / 2)) / 30;
-			rightHanda[0]-=2;
-			leftHanda[0]+=2;
-			leftLega[0]--;
-			leftLega[1] = leftLega[0];
-			rightLega[0] += 2;
-			rightLega[1] =-rightLega[0];
-			if (leftLega[0] == 0)
-			{
-				step = 0;
-			}
-			break;
+	case 0:
+		bodyyd = -rightLega[0] * (2 - sqrt(3 / 2)) / 30;
+		rightHanda[0] += 2;
+		leftHanda[0] -= 2;
+		rightLega[0]++;
+		rightLega[1] = rightLega[0];
+		leftLega[0] -= 2;
+		leftLega[1] = -leftLega[0];
+		if (rightLega[0] >= 30)
+		{
+			step = 1;
+		}
+		break;
+	case 1:
+		bodyyd = -rightLega[0] * (2 - sqrt(3 / 2)) / 30;
+		rightHanda[0] -= 2;
+		leftHanda[0] += 2;
+		rightLega[0]--;
+		rightLega[1] = rightLega[0];
+		leftLega[0] += 2;
+		leftLega[1] = -leftLega[0];
+		if (rightLega[0] == 0)
+		{
+			step = 2;
+		}
+		break;
+	case 2:
+		bodyyd = -leftLega[0] * (2 - sqrt(3 / 2)) / 30;
+		rightHanda[0] += 2;
+		leftHanda[0] -= 2;
+		leftLega[0]++;
+		leftLega[1] = leftLega[0];
+		rightLega[0] -= 2;
+		rightLega[1] = -rightLega[0];
+		if (leftLega[0] >= 30)
+		{
+			step = 3;
+		}
+		break;
+	case 3:
+		bodyyd = -leftLega[0] * (2 - sqrt(3 / 2)) / 30;
+		rightHanda[0] -= 2;
+		leftHanda[0] += 2;
+		leftLega[0]--;
+		leftLega[1] = leftLega[0];
+		rightLega[0] += 2;
+		rightLega[1] = -rightLega[0];
+		if (leftLega[0] == 0)
+		{
+			step = 0;
+		}
+		break;
 	}
 	rightHandx[0] = 1;
 	rightHandy[0] = 0;
@@ -364,15 +412,15 @@ void walk()
 //finish
 void jump()
 {
-	
+
 	switch (step)
 	{
 	case 0:
 		bodyyd = rightLega[0] * (2 - sqrt(2)) / 45;
 		rightLega[0]--;
-		rightLega[1]+=2;
+		rightLega[1] += 2;
 		leftLega[0]--;
-		leftLega[1]+=2;
+		leftLega[1] += 2;
 		if (rightLega[0] <= -45)
 		{
 			step = 1;
@@ -412,11 +460,11 @@ void jump()
 		break;
 	case 4:
 		bodyyd = rightLega[0] * (2 - sqrt(2)) / 45;
-	
-		rightLega[0]+=3;
-		rightLega[1]-=6;
-		leftLega[0]+=3;
-		leftLega[1]-=6;
+
+		rightLega[0] += 3;
+		rightLega[1] -= 6;
+		leftLega[0] += 3;
+		leftLega[1] -= 6;
 		if (rightLega[0] == 0)
 		{
 			motivation = 0;
@@ -454,11 +502,12 @@ void jump()
 }
 void changeColor()
 {
-	
+	singleColortest = true;
+	colorR = 255;
 }
 void shoot()
 {
-	if(rightHanda[1]>-90)
+	if (rightHanda[1] > -90)
 	{
 		rightHanda[1]--;
 		leftHanda[1]--;
@@ -477,11 +526,11 @@ void destruct()
 }
 void transform()
 {
-	
+
 }
 void test()
 {
-	if (leftHanda[0] >=-90)
+	if (leftHanda[0] >= -90)
 	{
 		leftHanda[0]--;
 	}
@@ -496,11 +545,11 @@ void draw_robot(void)
 	glTranslatef(0, bodyside / 2 + headside / 2, 0);									//draw head
 	head();
 	glPopMatrix();
-	
+
 	glPushMatrix();																		//left hand
 	leftHand();
 	glPopMatrix();
-	
+
 	glPushMatrix();																		//right hand
 	rightHand();
 	glPopMatrix();
@@ -530,11 +579,11 @@ void display(void)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(45.0f, 1.0f,1.0f,500.0f);
+	gluPerspective(45.0f, 1.0f, 1.0f, 500.0f);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(0, 0, 30, 0, 0, 0, 0, 1, 0);
+	gluLookAt(0, 10, 30, 0, 0, 0, 0, 1, 0);
 	draw();
 	glutSwapBuffers();
 }
@@ -623,13 +672,12 @@ void MotionMouse(int x, int y)
 void menu(int selection)
 {
 	motivation = selection;
-	step = 0;
 	standby();
 	glutPostRedisplay();
 }
 void timerFunction(int value)
 {
-	switch(motivation)
+	switch (motivation)
 	{
 	case 0:
 		standby();
@@ -679,7 +727,7 @@ int main(int argc, char** argv)
 	glutAddMenuEntry("Destruct", Destruct);
 	glutAddMenuEntry("Transform", Transform);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
-	
+
 	standby();
 
 	glutReshapeFunc(reshape);
