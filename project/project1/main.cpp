@@ -19,8 +19,8 @@ float rightHanda[2], rightHandx[2], rightHandy[2], rightHandz[2];			//right hand
 float leftLega[2], leftLegx[2], leftLegy[2], leftLegz[2];					//left leg
 float rightLega[2], rightLegx[2], rightLegy[2], rightLegz[2];				//right leg
 float headxd, headyd, headzd;											//move the head
-float leftHandxd, leftHandyd, leftHandz;								//move left hand
-float rightHandxd, rightHandyd, rightHandz;							//move right hand
+float leftHandxd, leftHandyd, leftHandzd;								//move left hand
+float rightHandxd, rightHandyd, rightHandzd;							//move right hand
 float leftLegxd, leftLegyd, leftLegzd;									//move leftleg
 float rightLegxd, rightLegyd, rightLegzd;								//move right leg
 float bodyxd, bodyyd, bodyzd;											//move the body
@@ -33,7 +33,7 @@ int rot_y = 0;
 int record_x = 0;
 int record_y = 0;
 int state = 1;
-int step = 0;																//decide which part of action
+int step = 0;//decide which part of action
 float headside = 2.5;														//length of head                  
 float bodyside = 5;															//length of body
 float limbside = 3;															//length of hand and leg
@@ -224,10 +224,10 @@ void body()
     }
 void standby() {
 	state = 1;
-	
-	bodyx = 0;
-	bodyy = 0;
-	bodyz = 0;
+	step = 0;
+	bodyxd = 0;
+	bodyyd = 0;
+	bodyzd = 0;
 
 	leftHanda[0] = 0;
 	leftHandx[0] = 1;
@@ -267,6 +267,7 @@ void standby() {
 }
 void walk()
 {
+	
 	for (int i = 0; i < 30; i++)
 	{
 		if (rightHanda[1] > -30)
@@ -306,7 +307,7 @@ void walk()
 			}
 			break;
 		case 2:
-			bodyy = -leftLega[0] * (2 - sqrt(3 / 2)) / 30;
+			bodyyd = -leftLega[0] * (2 - sqrt(3 / 2)) / 30;
 			rightHanda[0]+=2;
 			leftHanda[0]-=2;
 			leftLega[0]++;
@@ -319,7 +320,7 @@ void walk()
 			}
 			break;
 		case 3:
-			bodyy = -leftLega[0] * (2 - sqrt(3 / 2)) / 30;
+			bodyyd = -leftLega[0] * (2 - sqrt(3 / 2)) / 30;
 			rightHanda[0]-=2;
 			leftHanda[0]+=2;
 			leftLega[0]--;
@@ -360,8 +361,10 @@ void walk()
 	leftLegy[1] = 0;
 	leftLegz[1] = 0;
 }
+//finish
 void jump()
 {
+	
 	switch (step)
 	{
 	case 0:
@@ -376,13 +379,47 @@ void jump()
 		}
 		break;
 	case 1:
+		bodyyd += 2;
+
+		rightLega[0] += 3;
+		rightLega[1] -= 6;
+		leftLega[0] += 3;
+		leftLega[1] -= 6;
+		if (rightLega[0] == 0)
+		{
+
+			step = 2;
+		}
+		break;
+	case 2:
+		bodyyd -= 1;
+		if (bodyyd <= 0)
+		{
+			bodyyd = 0;
+			step = 3;
+		}
+		break;
+	case 3:
 		bodyyd = rightLega[0] * (2 - sqrt(2)) / 45;
+		rightLega[0]--;
+		rightLega[1] += 2;
+		leftLega[0]--;
+		leftLega[1] += 2;
+		if (rightLega[0] <= -45)
+		{
+			step = 4;
+		}
+		break;
+	case 4:
+		bodyyd = rightLega[0] * (2 - sqrt(2)) / 45;
+	
 		rightLega[0]+=3;
 		rightLega[1]-=6;
 		leftLega[0]+=3;
 		leftLega[1]-=6;
 		if (rightLega[0] == 0)
 		{
+			motivation = 0;
 			step = 0;
 		}
 		break;
@@ -436,7 +473,7 @@ void shoot()
 }
 void destruct()
 {
-	
+
 }
 void transform()
 {
