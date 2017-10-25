@@ -1,42 +1,43 @@
 ﻿  main.cpp
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(61): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(62): warning C4305: '引數': 從 'double' 轉換為 'GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(68): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(76): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(79): warning C4305: '引數': 從 'double' 轉換為 'GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(89): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(97): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(100): warning C4305: '引數': 從 'double' 轉換為 'GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(113): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(122): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(125): warning C4305: '引數': 從 'double' 轉換為 'GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(133): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(142): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(145): warning C4305: '引數': 從 'double' 轉換為 'GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(164): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(167): warning C4305: '引數': 從 'double' 轉換為 'GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(175): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(183): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(186): warning C4305: '引數': 從 'double' 轉換為 'GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(206): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(209): warning C4305: '引數': 從 'double' 轉換為 'GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(217): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(226): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(229): warning C4305: '引數': 從 'double' 轉換為 'GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(252): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(258): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(265): warning C4305: '引數': 從 'double' 轉換為 'GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(335): warning C4244: '=': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(348): warning C4244: '=': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(361): warning C4244: '=': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(374): warning C4244: '=': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(422): warning C4244: '=': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(454): warning C4244: '=': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(465): warning C4244: '=': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(621): warning C4244: '引數': 將 'float' 轉換為 'GLint'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(623): warning C4244: '引數': 將 'float' 轉換為 'GLint'，由於類型不同，可能導致資料遺失
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(740): warning C4101: 'count_menu': 未參考的區域變數
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(740): warning C4101: 'main_menu': 未參考的區域變數
-c:\users\user\desktop\graphic_project1_robot\project\project1\main.cpp(740): warning C4101: 'action_menu': 未參考的區域變數
-  project1.vcxproj -> C:\Users\user\Desktop\graphic_project1_robot\project\Debug\project1.exe
-  project1.vcxproj -> C:\Users\user\Desktop\graphic_project1_robot\project\Debug\project1.pdb (Partial PDB)
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(66): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(67): warning C4305: '引數': 從 'double' 轉換為 'GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(73): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(81): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(84): warning C4305: '引數': 從 'double' 轉換為 'GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(94): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(102): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(105): warning C4305: '引數': 從 'double' 轉換為 'GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(118): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(127): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(130): warning C4305: '引數': 從 'double' 轉換為 'GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(138): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(147): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(150): warning C4305: '引數': 從 'double' 轉換為 'GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(169): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(172): warning C4305: '引數': 從 'double' 轉換為 'GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(180): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(188): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(191): warning C4305: '引數': 從 'double' 轉換為 'GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(211): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(214): warning C4305: '引數': 從 'double' 轉換為 'GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(222): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(231): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(234): warning C4305: '引數': 從 'double' 轉換為 'GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(257): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(263): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(270): warning C4305: '引數': 從 'double' 轉換為 'GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(344): warning C4244: '=': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(358): warning C4244: '=': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(376): warning C4244: '=': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(392): warning C4244: '=': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(410): warning C4244: '=': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(459): warning C4244: '=': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(491): warning C4244: '=': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(502): warning C4244: '=': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(659): warning C4244: '引數': 將 'float' 轉換為 'GLint'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(661): warning C4244: '引數': 將 'float' 轉換為 'GLint'，由於類型不同，可能導致資料遺失
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(778): warning C4101: 'count_menu': 未參考的區域變數
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(778): warning C4101: 'main_menu': 未參考的區域變數
+c:\users\younger\documents\github\graphic_project1_robot\project\project1\main.cpp(778): warning C4101: 'action_menu': 未參考的區域變數
+  project1.vcxproj -> C:\Users\younger\Documents\GitHub\graphic_project1_robot\project\Debug\project1.exe
+  project1.vcxproj -> C:\Users\younger\Documents\GitHub\graphic_project1_robot\project\Debug\project1.pdb (Partial PDB)

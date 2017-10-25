@@ -18,6 +18,7 @@ float leftHanda[2], leftHandx[2], leftHandy[2], leftHandz[2];				//left hand
 float rightHanda[2], rightHandx[2], rightHandy[2], rightHandz[2];			//right hand
 float leftLega[2], leftLegx[2], leftLegy[2], leftLegz[2];					//left leg
 float rightLega[2], rightLegx[2], rightLegy[2], rightLegz[2];				//right leg
+
 float headxd, headyd, headzd;											//move the head
 float leftHandxd, leftHandyd, leftHandzd;								//move left hand
 float rightHandxd, rightHandyd, rightHandzd;							//move right hand
@@ -37,13 +38,17 @@ int rot_y = 0;
 int record_x = 0;
 int record_y = 0;
 int state = 1;
-int step = 0;//decide which part of action
-float headside = 2.5;														//length of head                  
-float bodyside = 5;															//length of body
-float limbside = 3;															//length of hand and leg
+int step = 0;
+//decide which part of action
+float headside = 2.5;													
+//length of head                  
+float bodyside = 5;															
+//length of body
+float limbside = 3;															
+//length of hand and leg
 static int WinWidth = 600;
 static int WinHeight = 600;
-enum { CYLINDER = 100 };														//used for calllist
+enum { CYLINDER = 100 };													//used for calllist
 enum { StandBy = 0, Walk, Jump, ChangeColor, Shoot, Destruct, Transform };	//the action name
 enum Color { Black, White, Red, Green, Blue };
 Color colorChoose;
@@ -318,69 +323,101 @@ void standby() {
 }
 void walk()
 {
-
-	for (int i = 0; i < 30; i++)
-	{
-		if (rightHanda[1] > -30)
-		{
-			rightHanda[0]--;
-			rightHanda[1]--;
-			leftHanda[0]++;
-			leftHanda[1]--;
-		}
-	}
 	switch (step)
 	{
 	case 0:
-		bodyyd = -rightLega[0] * (2 - sqrt(3 / 2)) / 30;
-		rightHanda[0] += 2;
-		leftHanda[0] -= 2;
-		rightLega[0]++;
-		rightLega[1] = rightLega[0];
-		leftLega[0] -= 2;
-		leftLega[1] = -leftLega[0];
-		if (rightLega[0] >= 30)
+		rightHanda[1]--;
+		leftHanda[1]--;
+		rightLega[0]--;
+		//rightLega[0] turn to -15 degree
+		rightLega[1] += 2;
+		//rightLega[1] turn to 30 degree
+		if (rightLega[0] <= -15)
 		{
+			rightLega[0] = -15;
 			step = 1;
 		}
 		break;
 	case 1:
-		bodyyd = -rightLega[0] * (2 - sqrt(3 / 2)) / 30;
-		rightHanda[0] -= 2;
-		leftHanda[0] += 2;
+		rightHanda[0]--;
+		leftHanda[0]++;
+		bodyyd = rightLega[0] * 1.5 / 30;
 		rightLega[0]--;
-		rightLega[1] = rightLega[0];
-		leftLega[0] += 2;
-		leftLega[1] = -leftLega[0];
-		if (rightLega[0] == 0)
+		//rightLega[0] turn to -30 degree
+		leftLega[0]++;
+		//leftLega[0] turn to 15 degree
+		if (rightLega[0] <= -30)
 		{
+			rightLega[0] = -30;
 			step = 2;
 		}
 		break;
 	case 2:
-		bodyyd = -leftLega[0] * (2 - sqrt(3 / 2)) / 30;
-		rightHanda[0] += 2;
-		leftHanda[0] -= 2;
-		leftLega[0]++;
-		leftLega[1] = leftLega[0];
-		rightLega[0] -= 2;
-		rightLega[1] = -rightLega[0];
-		if (leftLega[0] >= 30)
+		rightHanda[0]+=0.5;
+		leftHanda[0]-=0.5;
+		bodyyd = rightLega[0] * 1.5 / 30;
+		rightLega[0]++;
+		//rightLega[0] turn to 0 degree
+		rightLega[1]--;
+		//rightLega[1] turn to 0 degree
+		leftLega[0] += 0.5;
+		//leftLega[0] turn to 30 degree
+		leftLega[1] += 0.5;
+		//leftLega[1] turn to 15 degree
+		if (rightLega[0] >= 0)
 		{
+			rightLega[0] = 0;
 			step = 3;
 		}
 		break;
 	case 3:
-		bodyyd = -leftLega[0] * (2 - sqrt(3 / 2)) / 30;
-		rightHanda[0] -= 2;
-		leftHanda[0] += 2;
+		rightHanda[0]+=0.5;
+		leftHanda[0]-=0.5;
+		bodyyd = leftLega[0] * 1.5 / 30;
+		rightLega[0] += 0.25;
+		//rightLega[0] turn to 15 degree
 		leftLega[0]--;
-		leftLega[1] = leftLega[0];
-		rightLega[0] += 2;
-		rightLega[1] = -rightLega[0];
-		if (leftLega[0] == 0)
+		//leftLega[0] turn to -30 degree
+		leftLega[1] += 0.25;
+		//leftLega[1] turn to 30 degree
+		if (leftLega[0] <= -30)
 		{
-			step = 0;
+			leftLega[0] = -30;
+			step = 4;
+		}
+		break;
+	case 4:
+		rightHanda[0]-=0.5;
+		leftHanda[0]+=0.5;
+		bodyyd = leftLega[0] * 1.5 / 30;
+		rightLega[0] += 0.5;
+		//rightLega[1] turn to 30 degree
+		rightLega[1] += 0.5;
+		//rightLega[1] turn to 15 degree
+		leftLega[0] ++;
+		//leftLega[0] turn to 0 degree
+		leftLega[1] --;
+		//leftLega[1] turn to 0 degree
+		if (rightLega[0] >= 30)
+		{
+			rightLega[0] = 30;
+			step = 5;
+		}
+		break;
+	case 5:
+		rightHanda[0] -= 0.5;
+		leftHanda[0] += 0.5;
+		bodyyd = rightLega[0] * 1.5 / 30;
+		rightLega[0]--;
+		//rightLega[0] turn to -30 degree
+		rightLega[1] += 0.25;
+		//rightLega[1] turn to 30 degree
+		leftLega[0] += 0.25;
+		//leftLega[0] turn to 15 degree
+		if (rightLega[0] <= -30)
+		{
+			rightLega[0] = -30;
+			step = 2;
 		}
 		break;
 	}
