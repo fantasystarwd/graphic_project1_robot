@@ -18,14 +18,17 @@ float leftHanda[2], leftHandx[2], leftHandy[2], leftHandz[2];				//left hand
 float rightHanda[2], rightHandx[2], rightHandy[2], rightHandz[2];			//right hand
 float leftLega[2], leftLegx[2], leftLegy[2], leftLegz[2];					//left leg
 float rightLega[2], rightLegx[2], rightLegy[2], rightLegz[2];				//right leg
+float bodya, bodyx, bodyy, bodyz;											//body
 
 float headxd, headyd, headzd;											//move the head
 float leftHandxd, leftHandyd, leftHandzd;								//move left hand
 float rightHandxd, rightHandyd, rightHandzd;							//move right hand
 float leftLegxd, leftLegyd, leftLegzd;									//move leftleg
 float rightLegxd, rightLegyd, rightLegzd;								//move right leg
-float bodyxd, bodyyd, bodyzd;											//move the body
-
+float bodyxd, bodyyd, bodyzd,bodyry,bodyrz;								//move the body r for rotate
+float cannonyd;															//move cannon
+float bulletyd[3];														//shoot bullet
+float destructy[2],destructz[2];										//move when destruct
 bool singleColortest;
 int colorR, colorG, colorB;
 
@@ -48,7 +51,7 @@ float limbside = 3;
 //length of hand and leg
 static int WinWidth = 600;
 static int WinHeight = 600;
-enum { CYLINDER = 100 };													//used for calllist
+enum { CYLINDER = 100 ,SPHERE};													//used for calllist
 enum { StandBy = 0, Walk, Jump, ChangeColor, Shoot, Destruct, Transform };	//the action name
 enum Color { Black, White, Red, Green, Blue };
 Color colorChoose;
@@ -56,7 +59,9 @@ int motivation = 0;															//decide which action
 void head()
 {
 	glTranslated(headxd, headyd, headzd);
-
+	glTranslated(0, destructy[0], destructz[0]);
+	glTranslated(0, 1.45*destructy[1], 1.45*destructz[1]);
+	glRotated(bodya, bodyx, bodyy, bodyz);
 	if (!singleColortest)
 		glColor3f(0, 1, 0);
 	else
@@ -71,13 +76,13 @@ void leftHand()
 {
 	glTranslated(leftHandxd, leftHandyd, leftLegzd);
 	glTranslatef((bodyside*0.125) + (bodyside / 2) - 0.3, (bodyside / 2) * 3 / 5, 0.0);
-
+	glRotatef(leftHanda[0], leftHandx[0], leftHandy[0], leftHandz[0]);
 	glPushMatrix();														//first ankle
 	glRotatef(90, 0, 1, 0);
 	glCallList(CYLINDER);
 	glPopMatrix();
 
-	glRotatef(leftHanda[0], leftHandx[0], leftHandy[0], leftHandz[0]);
+	
 	glTranslatef(0.3 + limbside*0.8 / 2, -limbside / 2, 0);
 
 	glPushMatrix();														//upper lefthand
@@ -115,15 +120,16 @@ void leftHand()
 void rightHand()
 {
 	glTranslated(rightHandxd, rightHandyd, rightLegzd);
+	
 	glTranslatef(0.3 - (bodyside / 2) - (bodyside*0.125), (bodyside / 2) * 3 / 5, 0.0);
-
+	glRotatef(rightHanda[0], rightHandx[0], rightHandy[0], rightHandz[0]);
 	glPushMatrix();														//first ankle
 	glRotatef(180, 0, 1, 0);
 	glRotatef(90, 0, 1, 0);
 	glCallList(CYLINDER);
 	glPopMatrix();
 
-	glRotatef(rightHanda[0], rightHandx[0], rightHandy[0], rightHandz[0]);
+	
 	glTranslatef(-0.3 - limbside*0.8 / 2, -limbside / 2, 0);
 
 	glPushMatrix();														//upper righthand
@@ -158,6 +164,8 @@ void rightHand()
 void leftLeg()
 {
 	glTranslated(leftLegxd, leftLegyd, leftLegzd);
+	glTranslated(0, destructy[0], destructz[0]);
+	glTranslated(0, 0.55*destructy[1], 0.55*destructz[1]);
 	glTranslatef(0, 1 - bodyside, 0);
 
 	glPushMatrix();														//first ankle
@@ -199,7 +207,9 @@ void leftLeg()
 void rightLeg()
 {
 	glTranslated(rightLegxd, rightLegyd, rightLegzd);
+	glTranslated(0, destructy[0], destructz[0]);
 	glTranslatef(0, 1 - bodyside, 0);
+	
 
 	glPushMatrix();														//first ankle
 	glRotatef(180, 0, 1, 0);
@@ -241,6 +251,7 @@ void rightLeg()
 }
 void body()
 {
+
 	glTranslated(bodyxd, bodyyd, bodyzd);
 	glPushMatrix();
 	if (!singleColortest)
@@ -248,6 +259,9 @@ void body()
 	else
 		glColor3ub(colorR, colorG, colorB);
 
+	glTranslated(0, destructy[0], destructz[0]);
+	glTranslated(0, destructy[1], destructz[1]);
+	glRotated(bodya, bodyx, bodyy, bodyz);
 	glPushMatrix();
 	glScalef(1, 1, 0.5);         //top part
 	glutSolidCube(bodyside);
@@ -273,6 +287,22 @@ void body()
 
 	glPopMatrix();
 }
+void cannon(){
+	glPushMatrix();
+	glTranslated(0,-cannonyd,0);
+	glRotated(90, 1, 0, 0);
+	glCallList(CYLINDER);
+	glPopMatrix();
+}
+void bullet(float bullety){
+	glPushMatrix();
+	glTranslated(0,bullety,0);
+	if (bullety <= 0)
+	{
+		glCallList(SPHERE);
+	}
+	glPopMatrix();
+}
 void standby() {
 	state = 1;
 	step = 0;
@@ -281,10 +311,19 @@ void standby() {
 	colorR = colorG = colorB = 0;
 	colorChoose = Black;
 
+	bodya = 0;
+	bodyx = 0;
+	bodyy = 0;
+	bodyz = 0;
 	bodyxd = 0;
 	bodyyd = 0;
 	bodyzd = 0;
+	bodyry = 0;
+	bodyrz = 0;
 
+	leftHandxd = 0;
+	leftHandyd = 0;
+	leftHandzd = 0;
 	leftHanda[0] = 0;
 	leftHandx[0] = 1;
 	leftHandy[0] = 0;
@@ -294,6 +333,9 @@ void standby() {
 	leftHandy[1] = 0;
 	leftHandz[1] = 0;
 
+	rightHandxd = 0;
+	rightHandyd = 0;
+	rightHandzd = 0;
 	rightHanda[0] = 0;
 	rightHandx[0] = 1;
 	rightHandy[0] = 0;
@@ -303,6 +345,9 @@ void standby() {
 	rightHandy[1] = 0;
 	rightHandz[1] = 0;
 
+	leftLegxd = 0;
+	leftLegyd = 0;
+	leftLegzd = 0;
 	leftLega[0] = 0;
 	leftLegx[0] = 1;
 	leftLegy[0] = 0;
@@ -312,6 +357,9 @@ void standby() {
 	leftLegy[1] = 0;
 	leftLegz[1] = 0;
 
+	rightLegxd = 0;
+	rightLegyd = 0;
+	rightLegzd = 0;
 	rightLega[0] = 0;
 	rightLegx[0] = 1;
 	rightLegy[0] = 0;
@@ -320,6 +368,15 @@ void standby() {
 	rightLegx[1] = 0;
 	rightLegy[1] = 0;
 	rightLegz[1] = 0;
+
+	cannonyd = 0;
+	bulletyd[0] = 0;
+	bulletyd[1] = 0;
+	bulletyd[2] = 0;
+	destructy[0] = 0;
+	destructz[0] = 0;
+	destructy[1] = 0;
+	destructz[1] = 0;
 }
 void walk()
 {
@@ -572,6 +629,25 @@ void shoot()
 	{
 		rightHanda[1]--;
 		leftHanda[1]--;
+		cannonyd += 0.01;
+	}
+	else
+	{
+		bulletyd[0]--;
+		bulletyd[1]--;
+		bulletyd[2]--;
+		if(bulletyd[0]<-100)
+		  {
+			bulletyd[0] = 0;
+		  }
+		if(bulletyd[1]<-100)
+		  {
+			bulletyd[1] = 10;
+		  }
+		if (bulletyd[2] < -100)
+		{
+			bulletyd[2] = 20;
+		}
 	}
 	rightHandx[1] = 1;
 	rightHandy[1] = 0;
@@ -583,7 +659,48 @@ void shoot()
 }
 void destruct()
 {
-
+	if(rightHandyd> - bodyside*13/10 -limbside * 7 / 4)
+	{
+		rightHandyd-=0.1;
+		rightHandxd -= 0.08;
+		rightHanda[0] += 0.72;
+	}
+	rightHandx[0] = 0;
+	rightHandy[0] = 0;
+	rightHandz[0] = 1;
+	if (leftHandyd > -bodyside*13/10)
+	{
+		leftHandyd -= 0.1;
+	}
+	if (destructz[0]<6)
+	{
+		destructy[0] -= 3.0 / 50;
+		destructz[0]+=6.0/45;
+		leftLega[1]+=2;
+		rightLega[1]+=2;
+	}
+	else if(bodyrz<90)
+	{
+		destructy[1] = (-bodyside - limbside * 7 / 4+1.5)*sin(bodyry*3.14159 / 180);
+		destructz[1] = - (-bodyside - limbside * 7 / 4 + 1.5)*sin(bodyrz*3.14159/180);
+		bodya += 2;
+		leftLega[0] += 2;
+		leftLega[1] -= 2;
+		bodyry+=2;
+		bodyrz+=2;
+	}
+	leftLegx[0] = 1;
+	leftLegy[0] = 0;
+	leftLegz[0] = 0;
+	leftLegx[1] = 1;
+	leftLegy[1] = 0;
+	leftLegz[1] = 0;
+	rightLegx[1] = 1;
+	rightLegy[1] = 0;
+	rightLegz[1] = 0;
+	bodyx = 1;
+	bodyy = 0;
+	bodyz = 0;
 }
 void transform()
 {
@@ -601,7 +718,9 @@ void test()
 }
 void draw_robot(void)
 {
+
 	body();																				//draw body
+	
 	glPushMatrix();
 	glTranslatef(0, bodyside / 2 + headside / 2, 0);									//draw head
 	head();
@@ -609,10 +728,30 @@ void draw_robot(void)
 
 	glPushMatrix();																		//left hand
 	leftHand();
+	if (motivation == Shoot)
+	{
+		cannon();
+		if(rightHanda[1]<=-90)
+		{
+			bullet(bulletyd[0]);
+			bullet(bulletyd[1]);
+			bullet(bulletyd[2]);
+		}
+	}
 	glPopMatrix();
 
 	glPushMatrix();																		//right hand
 	rightHand();
+	if (motivation == Shoot)
+	{
+		cannon();
+		if (rightHanda[1] <= -90)
+		{
+			bullet(bulletyd[0]);
+			bullet(bulletyd[1]);
+			bullet(bulletyd[2]);
+		}
+	}
 	glPopMatrix();
 
 	glPushMatrix();                                          							//left leg
@@ -623,6 +762,7 @@ void draw_robot(void)
 	rightLeg();
 	glPopMatrix();
 
+	
 }
 void draw()
 {
@@ -816,6 +956,12 @@ int main(int argc, char** argv)
 	glColor3ub(0, 0, 0);
 	gluCylinder(Ankle, 0.5, 0.5, 3, 15, 15);
 	gluDeleteQuadric(Ankle);
+	glEndList();
+	glNewList(SPHERE, GL_COMPILE);
+	GLUquadric *BULLET = gluNewQuadric();
+	glColor3ub(0, 0, 0);
+	glutSolidSphere(0.5, 12, 12);
+	gluDeleteQuadric(BULLET);
 	glEndList();
 	glutTimerFunc(15, timerFunction, 1);
 	glutMainLoop();
