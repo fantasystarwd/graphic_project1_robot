@@ -22,6 +22,7 @@ float rightHanda[2], rightHandx[2], rightHandy[2], rightHandz[2];			//right hand
 float leftLega[2], leftLegx[2], leftLegy[2], leftLegz[2];					//left leg
 float rightLega[2], rightLegx[2], rightLegy[2], rightLegz[2];				//right leg
 float bodya, bodyx, bodyy, bodyz;											//body
+float alla, allx, ally, allz;												//all rotate
 
 float headxd, headyd, headzd;											//move the head
 float leftHandxd, leftHandyd, leftHandzd;								//move left hand
@@ -32,6 +33,10 @@ float bodyxd, bodyyd, bodyzd,bodyry,bodyrz;								//move the body r for rotate
 float cannonyd;															//move cannon
 float bulletyd[3];														//shoot bullet
 float destructy[2],destructz[2];										//move when destruct
+float anklex;															//move for transform
+float limby[2],limbz[2];										//move for transform		
+float bodyw;															//move for transform
+
 bool singleColortest;
 int colorR, colorG, colorB;
 
@@ -56,7 +61,7 @@ static int WinWidth = 600;
 static int WinHeight = 600;
 enum { CYLINDER = 100 ,SPHERE};													//used for calllist
 enum { StandBy = 0, Walk, Jump, ChangeColor, Shoot, Destruct, Transform };	//the action name
-enum Color { Black, White, Red, Green, Blue };
+enum Color { Black, White, Red, Green, Blue ,Turn};
 Color colorChoose;
 int motivation = 0;	//decide which action
 GLint _textureId[2];
@@ -114,7 +119,11 @@ void head()
 	else
 		glColor3ub(colorR, colorG, colorB);
 
+	glPushMatrix();
+	glTranslated(0, 0, limbz[0]);
 	glutSolidCube(headside);
+	glPopMatrix();
+
 	glTranslatef(0, headside*0.75, 0);
 	glScalef(1.2, 0.5, 1.2);
 	glutSolidCube(headside);
@@ -125,6 +134,7 @@ void leftHand()
 	glTranslatef((bodyside*0.125) + (bodyside / 2) - 0.3, (bodyside / 2) * 3 / 5, 0.0);
 	glRotatef(leftHanda[0], leftHandx[0], leftHandy[0], leftHandz[0]);
 	glPushMatrix();														//first ankle
+	glTranslated(1+anklex, 0, 0);
 	glRotatef(90, 0, 1, 0);
 	glCallList(CYLINDER);
 	glPopMatrix();
@@ -147,6 +157,7 @@ void leftHand()
 	glRotatef(leftHanda[1], leftHandx[1], leftHandy[1], leftHandz[1]);
 
 	glPushMatrix();														//second ankle
+	glTranslated(1+anklex, 0, 0);
 	glRotatef(90, 0, 1, 0);
 	glCallList(CYLINDER);
 	glPopMatrix();
@@ -154,6 +165,7 @@ void leftHand()
 	glTranslatef(0.3 + limbside*0.8 / 2, -limbside / 2, 0.0);
 
 	glPushMatrix();														//lower lefthand
+	glTranslated(0, limby[1], 0);
 	glScalef(0.9, 2, 1.1);
 
 	if (!singleColortest)
@@ -172,6 +184,7 @@ void rightHand()
 	glRotatef(rightHanda[0], rightHandx[0], rightHandy[0], rightHandz[0]);
 	glPushMatrix();														//first ankle
 	glRotatef(180, 0, 1, 0);
+	glTranslated(1 + anklex, 0, 0);
 	glRotatef(90, 0, 1, 0);
 	glCallList(CYLINDER);
 	glPopMatrix();
@@ -193,6 +206,7 @@ void rightHand()
 
 	glPushMatrix();														//second ankle
 	glRotatef(180, 0, 1, 0);
+	glTranslated(1 + anklex, 0, 0);
 	glRotatef(90, 0, 1, 0);
 	glCallList(CYLINDER);
 	glPopMatrix();
@@ -200,6 +214,7 @@ void rightHand()
 	glTranslatef(-0.3 - limbside*0.8 / 2, -limbside / 2, 0.0);
 
 	glPushMatrix();														//lower righthand
+	glTranslated(0, limby[1], 0);
 	glScalef(0.9, 2, 1.1);
 	if (!singleColortest)
 		glColor3ub(89, 197, 255);
@@ -216,14 +231,16 @@ void leftLeg()
 	glTranslatef(0, 1 - bodyside, 0);
 
 	glPushMatrix();														//first ankle
+	glTranslated(1 + anklex, 0, 0);
 	glRotatef(90, 0, 1, 0);
 	glCallList(CYLINDER);
 	glPopMatrix();
 
 	glRotatef(leftLega[0], leftLegx[0], leftLegy[0], leftLegz[0]);
 	glTranslatef(0.3 + limbside*0.8 / 2, -1 - limbside / 2, 0);
-
+	glTranslated(0, limby[0], 0);
 	glPushMatrix();														//upper leftleg
+	
 	glScalef(0.8, 2, 1);
 	if (!singleColortest)
 		glColor3ub(255, 177, 98);
@@ -236,6 +253,7 @@ void leftLeg()
 	glRotatef(leftLega[1], leftLegx[1], leftLegy[1], leftLegz[1]);
 
 	glPushMatrix();														//second ankle
+	glTranslated(1 + anklex, 0, 0);
 	glRotatef(90, 0, 1, 0);
 	glCallList(CYLINDER);
 	glPopMatrix();
@@ -243,6 +261,7 @@ void leftLeg()
 	glTranslatef(0.3 + limbside*0.8 / 2, -limbside / 2, 0.0);
 
 	glPushMatrix();														//lower leftleg
+	glTranslated(0, limby[1], 0);
 	glScalef(0.9, 2, 1.1);
 	if (!singleColortest)
 		glColor3ub(89, 197, 255);
@@ -260,14 +279,16 @@ void rightLeg()
 
 	glPushMatrix();														//first ankle
 	glRotatef(180, 0, 1, 0);
+	glTranslated(1 + anklex, 0, 0);
 	glRotatef(90, 0, 1, 0);
 	glCallList(CYLINDER);
 	glPopMatrix();
 
 	glRotatef(rightLega[0], rightLegx[0], rightLegy[0], rightLegz[0]);
 	glTranslatef(-0.3 - limbside*0.8 / 2, -1 - limbside / 2, 0);
-
+	glTranslated(0, limby[0], 0);
 	glPushMatrix();														//upper rightleg
+	
 	glScalef(0.8, 2, 1);
 	if (!singleColortest)
 		glColor3ub(255, 177, 98);
@@ -281,6 +302,7 @@ void rightLeg()
 
 	glPushMatrix();														//second ankle
 	glRotatef(180, 0, 1, 0);
+	glTranslated(1 + anklex, 0, 0);
 	glRotatef(90, 0, 1, 0);
 	glCallList(CYLINDER);
 	glPopMatrix();
@@ -288,6 +310,7 @@ void rightLeg()
 	glTranslatef(-0.3 - limbside*0.8 / 2, -limbside / 2, 0.0);
 
 	glPushMatrix();														//lower rightleg
+	glTranslated(0, limby[1], 0);
 	glScalef(0.9, 2, 1.1);
 	if (!singleColortest)
 		glColor3ub(89, 197, 255);
@@ -298,8 +321,8 @@ void rightLeg()
 }
 void body()
 {
-
 	glTranslated(bodyxd, bodyyd, bodyzd);
+	glRotated(alla, allx, ally, allz);
 	glPushMatrix();
 	if (!singleColortest)
 		glColor3f(1, 0, 0);
@@ -328,7 +351,7 @@ void body()
 
 	glPushMatrix();
 	glTranslatef(0, -3.75, 0);
-	glScalef(0.2, 0.5, 0.5);
+	glScalef(bodyw, 0.5, 0.5);
 	glutSolidCube(bodyside);
 	glPopMatrix();
 
@@ -357,6 +380,20 @@ void standby() {
 	singleColortest = false;
 	colorR = colorG = colorB = 0;
 	colorChoose = Black;
+
+	anklex= 0;
+
+	bodyw = 0.2;
+
+	limby[0] = 0;
+	limby[1] = 0;
+	limbz[0] = 0;
+	limbz[1] = 0;
+
+	alla = 0;
+	allx = 0;
+	ally = 0;
+	allz = 0;
 
 	bodya = 0;
 	bodyx = 0;
@@ -668,6 +705,53 @@ void changeColor()
 		colorB = 255;
 		colorR = colorG = 0;
 		break;
+	case Turn:
+		switch (step)
+		{
+		case 0:
+			colorR++;
+			if (colorR >= 255)
+			{
+				step = 1;
+			}
+			break;
+		case 1:
+			colorG++;
+			if (colorG >= 255)
+			{
+				step = 2;
+			}
+			break;
+		case 2:
+			colorB++;
+			if (colorB >= 255)
+			{
+				step = 3;
+			}
+			break;
+		case 3:
+			colorR--;
+			if (colorR <= 0)
+			{
+				step = 4;
+			}
+			break;
+		case 4:
+			colorG--;
+			if (colorG <= 0)
+			{
+				step = 5;
+			}
+			break;
+		case 5:
+			colorB--;
+			if (colorB <= 0)
+			{
+				step = 0;
+			}
+			break;
+		}
+		break;
 	}
 }
 void shoot()
@@ -751,7 +835,40 @@ void destruct()
 }
 void transform()
 {
-
+	if (anklex >-0.3)
+	{
+		anklex -= 0.01;
+	}
+	else if (alla < 90)
+	{
+		alla+=3;
+		limby[0] += 0.025;
+		limby[1] += 0.1;
+		leftHanda[0] -= 3;
+		rightHanda[0] -= 3;
+		leftLega[0] -= 3;
+		rightLega[0] -= 3;
+	}
+	else if(headyd>-2.5)
+	{
+		headyd -= 0.05;
+		bodyw += 0.016;
+		leftLegxd += 0.04;
+		rightLegxd -= 0.04;
+	}
+	else if (limbz[0] > -2.5)
+	{
+		limbz[0] -= 0.05;
+	}
+	allx = 1;
+	ally = 0;
+	allz = 0;
+	leftHandx[0] = 1;
+	leftHandy[0] = 0;
+	leftHandz[0] = 0;
+	rightHandx[0] = 1;
+	rightHandy[0] = 0;
+	rightHandz[0] = 0;
 }
 void test()
 {
@@ -987,6 +1104,7 @@ int main(int argc, char** argv)
 	glutAddMenuEntry("Red", Red);
 	glutAddMenuEntry("Green", Green);
 	glutAddMenuEntry("Blue", Blue);
+	glutAddMenuEntry("Turn", Turn);
 
 	glutCreateMenu(menu);
 	glutAddMenuEntry("Stand By", StandBy);
@@ -1007,7 +1125,7 @@ int main(int argc, char** argv)
 	glNewList(CYLINDER, GL_COMPILE);
 	GLUquadric *Ankle = gluNewQuadric();
 	glColor3ub(0, 0, 0);
-	gluCylinder(Ankle, 0.5, 0.5, 3, 15, 15);
+	gluCylinder(Ankle, 0.5, 0.5, 2, 15, 15);
 	gluDeleteQuadric(Ankle);
 	glEndList();
 	glNewList(SPHERE, GL_COMPILE);
