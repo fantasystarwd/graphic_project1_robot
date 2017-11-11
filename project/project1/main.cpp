@@ -29,12 +29,12 @@ float leftHandxd, leftHandyd, leftHandzd;								//move left hand
 float rightHandxd, rightHandyd, rightHandzd;							//move right hand
 float leftLegxd, leftLegyd, leftLegzd;									//move leftleg
 float rightLegxd, rightLegyd, rightLegzd;								//move right leg
-float bodyxd, bodyyd, bodyzd,bodyry,bodyrz;								//move the body r for rotate
+float bodyxd, bodyyd, bodyzd, bodyry, bodyrz;								//move the body r for rotate
 float cannonyd;															//move cannon
 float bulletyd[3];														//shoot bullet
-float destructy[2],destructz[2];										//move when destruct
+float destructy[2], destructz[2];										//move when destruct
 float anklex;															//move for transform
-float limby[2],limbz[2];										//move for transform		
+float limby[2], limbz[2];										//move for transform		
 float bodyw;															//move for transform
 
 bool singleColortest;
@@ -51,20 +51,22 @@ int record_y = 0;
 int state = 1;
 int step = 0;
 //decide which part of action
-float headside = 2.5;													
+float headside = 2.5;
 //length of head                  
-float bodyside = 5;															
+float bodyside = 5;
 //length of body
-float limbside = 3;															
+float limbside = 3;
 //length of hand and leg
 static int WinWidth = 600;
 static int WinHeight = 600;
-enum { CYLINDER = 100 ,SPHERE};													//used for calllist
+enum { CYLINDER = 100, SPHERE };													//used for calllist
 enum { StandBy = 0, Walk, Jump, ChangeColor, Shoot, Destruct, Transform };	//the action name
-enum Color { Black, White, Red, Green, Blue ,Turn};
-Color colorChoose;
+enum Color { Black, White, Red, Green, Blue, Turn };   //the color menu
+Color colorChoose; //decide now use which color
 int motivation = 0;	//decide which action
-GLint _textureId[2];
+int texture_C; //choose now use which texture
+float textureWalk;
+GLint _textureId[2]; //storage the texture
 const float FLOOR_SIZE = 20.0f; //The length of each side of the floor
 
 
@@ -89,20 +91,38 @@ void DrawBackGround()
 	glPushMatrix();
 	//glTranslatef(0,0,-40);
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, _textureId[0]);
+	glBindTexture(GL_TEXTURE_2D, _textureId[texture_C]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glColor3f(1, 1, 1);
+	glTranslatef(0, -3.0f, 0.0f);
+	glRotatef(-15, 1, 0, 0);
+	//glRotatef(180, 0, 0, 1);
+	//glScalef(1.5f, 1.6f, 1.0f);
 	glBegin(GL_QUADS);
-	glNormal3f(0, 0, 1);
-	glTexCoord2f(0, 0);
-	glVertex3f(-10 ,-10, -3);
-	glTexCoord2f(1, 0);
-	glVertex3f(10, -10, -3);
-	glTexCoord2f(1, 1);
-	glVertex3f(10, 10, -3);
-	glTexCoord2f(0, 1);
-	glVertex3f(-10, 10, -3);
+	if (texture_C == 0) {
+		glRotatef(180, 0, 0, 1);
+		glNormal3f(0, 0, 1);
+		glTexCoord2f(0, textureWalk);
+		glVertex3f(-15, -16, -3);
+		glTexCoord2f(1, textureWalk);
+		glVertex3f(15, -16, -3);
+		glTexCoord2f(1, textureWalk + 0.8);
+		glVertex3f(15, 16, -3);
+		glTexCoord2f(0, textureWalk + 0.8);
+		glVertex3f(-15, 16, -3);
+	}
+	else if (texture_C == 1) {
+		glNormal3f(0, 0, 1);
+		glTexCoord2f(0, 0);
+		glVertex3f(-15, -16, -3);
+		glTexCoord2f(1, 0);
+		glVertex3f(15, -16, -3);
+		glTexCoord2f(1, 1);
+		glVertex3f(15, 16, -3);
+		glTexCoord2f(0, 1);
+		glVertex3f(-15, 16, -3);
+	}
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
 	glPopMatrix();
@@ -134,12 +154,12 @@ void leftHand()
 	glTranslatef((bodyside*0.125) + (bodyside / 2) - 0.3, (bodyside / 2) * 3 / 5, 0.0);
 	glRotatef(leftHanda[0], leftHandx[0], leftHandy[0], leftHandz[0]);
 	glPushMatrix();														//first ankle
-	glTranslated(1+anklex, 0, 0);
+	glTranslated(1 + anklex, 0, 0);
 	glRotatef(90, 0, 1, 0);
 	glCallList(CYLINDER);
 	glPopMatrix();
 
-	
+
 	glTranslatef(0.3 + limbside*0.8 / 2, -limbside / 2, 0);
 
 	glPushMatrix();														//upper lefthand
@@ -157,7 +177,7 @@ void leftHand()
 	glRotatef(leftHanda[1], leftHandx[1], leftHandy[1], leftHandz[1]);
 
 	glPushMatrix();														//second ankle
-	glTranslated(1+anklex, 0, 0);
+	glTranslated(1 + anklex, 0, 0);
 	glRotatef(90, 0, 1, 0);
 	glCallList(CYLINDER);
 	glPopMatrix();
@@ -179,7 +199,7 @@ void leftHand()
 void rightHand()
 {
 	glTranslated(rightHandxd, rightHandyd, rightLegzd);
-	
+
 	glTranslatef(0.3 - (bodyside / 2) - (bodyside*0.125), (bodyside / 2) * 3 / 5, 0.0);
 	glRotatef(rightHanda[0], rightHandx[0], rightHandy[0], rightHandz[0]);
 	glPushMatrix();														//first ankle
@@ -189,7 +209,7 @@ void rightHand()
 	glCallList(CYLINDER);
 	glPopMatrix();
 
-	
+
 	glTranslatef(-0.3 - limbside*0.8 / 2, -limbside / 2, 0);
 
 	glPushMatrix();														//upper righthand
@@ -240,7 +260,7 @@ void leftLeg()
 	glTranslatef(0.3 + limbside*0.8 / 2, -1 - limbside / 2, 0);
 	glTranslated(0, limby[0], 0);
 	glPushMatrix();														//upper leftleg
-	
+
 	glScalef(0.8, 2, 1);
 	if (!singleColortest)
 		glColor3ub(255, 177, 98);
@@ -275,7 +295,7 @@ void rightLeg()
 	glTranslated(rightLegxd, rightLegyd, rightLegzd);
 	glTranslated(0, destructy[0], destructz[0]);
 	glTranslatef(0, 1 - bodyside, 0);
-	
+
 
 	glPushMatrix();														//first ankle
 	glRotatef(180, 0, 1, 0);
@@ -288,7 +308,7 @@ void rightLeg()
 	glTranslatef(-0.3 - limbside*0.8 / 2, -1 - limbside / 2, 0);
 	glTranslated(0, limby[0], 0);
 	glPushMatrix();														//upper rightleg
-	
+
 	glScalef(0.8, 2, 1);
 	if (!singleColortest)
 		glColor3ub(255, 177, 98);
@@ -357,16 +377,16 @@ void body()
 
 	glPopMatrix();
 }
-void cannon(){
+void cannon() {
 	glPushMatrix();
-	glTranslated(0,-cannonyd,0);
+	glTranslated(0, -cannonyd, 0);
 	glRotated(90, 1, 0, 0);
 	glCallList(CYLINDER);
 	glPopMatrix();
 }
-void bullet(float bullety){
+void bullet(float bullety) {
 	glPushMatrix();
-	glTranslated(0,bullety,0);
+	glTranslated(0, bullety, 0);
 	if (bullety <= 0)
 	{
 		glCallList(SPHERE);
@@ -380,8 +400,10 @@ void standby() {
 	singleColortest = false;
 	colorR = colorG = colorB = 0;
 	colorChoose = Black;
+	texture_C = 0;
+	textureWalk = 0.2;
 
-	anklex= 0;
+	anklex = 0;
 
 	bodyw = 0.2;
 
@@ -494,8 +516,8 @@ void walk()
 		}
 		break;
 	case 2:
-		rightHanda[0]+=0.5;
-		leftHanda[0]-=0.5;
+		rightHanda[0] += 0.5;
+		leftHanda[0] -= 0.5;
 		bodyyd = rightLega[0] * 1.5 / 30;
 		rightLega[0]++;
 		//rightLega[0] turn to 0 degree
@@ -512,8 +534,8 @@ void walk()
 		}
 		break;
 	case 3:
-		rightHanda[0]+=0.5;
-		leftHanda[0]-=0.5;
+		rightHanda[0] += 0.5;
+		leftHanda[0] -= 0.5;
 		bodyyd = leftLega[0] * 1.5 / 30;
 		rightLega[0] += 0.25;
 		//rightLega[0] turn to 15 degree
@@ -528,8 +550,8 @@ void walk()
 		}
 		break;
 	case 4:
-		rightHanda[0]-=0.5;
-		leftHanda[0]+=0.5;
+		rightHanda[0] -= 0.5;
+		leftHanda[0] += 0.5;
 		bodyyd = leftLega[0] * 1.5 / 30;
 		rightLega[0] += 0.5;
 		//rightLega[1] turn to 30 degree
@@ -562,6 +584,13 @@ void walk()
 		}
 		break;
 	}
+
+	textureWalk -= 0.001;
+	if (textureWalk <= 0)
+	{
+		textureWalk = 0.2;
+	}
+
 	rightHandx[0] = 1;
 	rightHandy[0] = 0;
 	rightHandz[0] = 0;
@@ -616,7 +645,7 @@ void jump()
 		leftLega[1] -= 6;
 		if (rightLega[0] == 0)
 		{
-
+			texture_C = 1;
 			step = 2;
 		}
 		break;
@@ -648,9 +677,11 @@ void jump()
 		leftLega[1] -= 6;
 		if (rightLega[0] == 0)
 		{
-			motivation = 0;
-			step = 0;
+			//motivation = 0;
+			step = 5;
 		}
+		break;
+	default:
 		break;
 	}
 	rightHandx[0] = 1;
@@ -767,14 +798,14 @@ void shoot()
 		bulletyd[0]--;
 		bulletyd[1]--;
 		bulletyd[2]--;
-		if(bulletyd[0]<-100)
-		  {
+		if (bulletyd[0] < -100)
+		{
 			bulletyd[0] = 0;
-		  }
-		if(bulletyd[1]<-100)
-		  {
+		}
+		if (bulletyd[1] < -100)
+		{
 			bulletyd[1] = 10;
-		  }
+		}
 		if (bulletyd[2] < -100)
 		{
 			bulletyd[2] = 20;
@@ -790,35 +821,35 @@ void shoot()
 }
 void destruct()
 {
-	if(rightHandyd> - bodyside*13/10 -limbside * 7 / 4)
+	if (rightHandyd > -bodyside * 13 / 10 - limbside * 7 / 4)
 	{
-		rightHandyd-=0.1;
+		rightHandyd -= 0.1;
 		rightHandxd -= 0.08;
 		rightHanda[0] += 0.72;
 	}
 	rightHandx[0] = 0;
 	rightHandy[0] = 0;
 	rightHandz[0] = 1;
-	if (leftHandyd > -bodyside*13/10)
+	if (leftHandyd > -bodyside * 13 / 10)
 	{
 		leftHandyd -= 0.1;
 	}
-	if (destructz[0]<6)
+	if (destructz[0] < 6)
 	{
 		destructy[0] -= 3.0 / 50;
-		destructz[0]+=6.0/45;
-		leftLega[1]+=2;
-		rightLega[1]+=2;
+		destructz[0] += 6.0 / 45;
+		leftLega[1] += 2;
+		rightLega[1] += 2;
 	}
-	else if(bodyrz<90)
+	else if (bodyrz < 90)
 	{
-		destructy[1] = (-bodyside - limbside * 7 / 4+1.5)*sin(bodyry*3.14159 / 180);
-		destructz[1] = - (-bodyside - limbside * 7 / 4 + 1.5)*sin(bodyrz*3.14159/180);
+		destructy[1] = (-bodyside - limbside * 7 / 4 + 1.5)*sin(bodyry*3.14159 / 180);
+		destructz[1] = -(-bodyside - limbside * 7 / 4 + 1.5)*sin(bodyrz*3.14159 / 180);
 		bodya += 2;
 		leftLega[0] += 2;
 		leftLega[1] -= 2;
-		bodyry+=2;
-		bodyrz+=2;
+		bodyry += 2;
+		bodyrz += 2;
 	}
 	leftLegx[0] = 1;
 	leftLegy[0] = 0;
@@ -835,13 +866,13 @@ void destruct()
 }
 void transform()
 {
-	if (anklex >-0.3)
+	if (anklex > -0.3)
 	{
 		anklex -= 0.01;
 	}
 	else if (alla < 90)
 	{
-		alla+=3;
+		alla += 3;
 		limby[0] += 0.025;
 		limby[1] += 0.1;
 		leftHanda[0] -= 3;
@@ -849,7 +880,7 @@ void transform()
 		leftLega[0] -= 3;
 		rightLega[0] -= 3;
 	}
-	else if(headyd>-2.5)
+	else if (headyd > -2.5)
 	{
 		headyd -= 0.05;
 		bodyw += 0.016;
@@ -884,7 +915,7 @@ void draw_robot(void)
 {
 
 	body();																				//draw body
-	
+
 	glPushMatrix();
 	glTranslatef(0, bodyside / 2 + headside / 2, 0);									//draw head
 	head();
@@ -895,7 +926,7 @@ void draw_robot(void)
 	if (motivation == Shoot)
 	{
 		cannon();
-		if(rightHanda[1]<=-90)
+		if (rightHanda[1] <= -90)
 		{
 			bullet(bulletyd[0]);
 			bullet(bulletyd[1]);
@@ -926,7 +957,7 @@ void draw_robot(void)
 	rightLeg();
 	glPopMatrix();
 
-	
+
 }
 void draw()
 {
@@ -1013,6 +1044,8 @@ void init(void)
 
 	Image* image = loadBMP("org1.bmp");
 	_textureId[0] = loadTexture(image);
+	image = loadBMP("org2.bmp");
+	_textureId[1] = loadTexture(image);
 	delete image;
 
 }
@@ -1110,7 +1143,7 @@ int main(int argc, char** argv)
 	glutAddMenuEntry("Stand By", StandBy);
 	glutAddMenuEntry("Walk", Walk);
 	glutAddMenuEntry("Jump", Jump);
-	glutAddSubMenu("Change Color",color_menu);
+	glutAddSubMenu("Change Color", color_menu);
 	glutAddMenuEntry("Shoot", Shoot);
 	glutAddMenuEntry("Destruct", Destruct);
 	glutAddMenuEntry("Transform", Transform);
