@@ -5,7 +5,10 @@
 #include <string.h>
 #include <math.h>
 #include "../freeglut/include/GL/glut.h"
+#include "imageloader.h"
 #include<iostream>
+
+
 using namespace std;
 static int draw_mode = 1;
 static int action = 0;
@@ -55,7 +58,51 @@ enum { CYLINDER = 100 ,SPHERE};													//used for calllist
 enum { StandBy = 0, Walk, Jump, ChangeColor, Shoot, Destruct, Transform };	//the action name
 enum Color { Black, White, Red, Green, Blue };
 Color colorChoose;
-int motivation = 0;															//decide which action
+int motivation = 0;	//decide which action
+GLint _textureId[2];
+const float FLOOR_SIZE = 20.0f; //The length of each side of the floor
+
+
+//Makes the image into a texture, and returns the id of the texture
+GLuint loadTexture(Image* image) {
+	GLuint textureId;
+	glGenTextures(1, &textureId);
+	glBindTexture(GL_TEXTURE_2D, textureId);
+	glTexImage2D(GL_TEXTURE_2D,
+		0,
+		GL_RGB,
+		image->width, image->height,
+		0,
+		GL_RGB,
+		GL_UNSIGNED_BYTE,
+		image->pixels);
+	return textureId;
+}
+
+void DrawBackGround()
+{
+	glPushMatrix();
+	//glTranslatef(0,0,-40);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, _textureId[0]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glColor3f(1, 1, 1);
+	glBegin(GL_QUADS);
+	glNormal3f(0, 0, 1);
+	glTexCoord2f(0, 0);
+	glVertex3f(-10 ,-10, -3);
+	glTexCoord2f(1, 0);
+	glVertex3f(10, -10, -3);
+	glTexCoord2f(1, 1);
+	glVertex3f(10, 10, -3);
+	glTexCoord2f(0, 1);
+	glVertex3f(-10, 10, -3);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+	glPopMatrix();
+}
+
 void head()
 {
 	glTranslated(headxd, headyd, headzd);
@@ -785,6 +832,7 @@ void display(void)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(0, 10, 30, 0, 0, 0, 0, 1, 0);
+	DrawBackGround();
 	draw();
 	glutSwapBuffers();
 }
@@ -845,6 +893,11 @@ void init(void)
 	glMateriali(GL_FRONT, GL_SHININESS, 128);
 
 	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+
+	Image* image = loadBMP("org1.bmp");
+	_textureId[0] = loadTexture(image);
+	delete image;
+
 }
 void Mouse(int button, int state, int x, int y)
 {
