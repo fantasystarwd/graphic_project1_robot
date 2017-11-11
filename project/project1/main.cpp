@@ -60,6 +60,8 @@ float limbside = 3;
 static int WinWidth = 600;
 static int WinHeight = 600;
 enum { CYLINDER = 100, SPHERE };													//used for calllist
+enum trans { Shoot_t, sb };
+trans transChoose;
 enum { StandBy = 0, Walk, Jump, ChangeColor, Shoot, Destruct, Transform };	//the action name
 enum Color { Black, White, Red, Green, Blue, Turn };   //the color menu
 Color colorChoose; //decide now use which color
@@ -400,12 +402,16 @@ void standby() {
 	singleColortest = false;
 	colorR = colorG = colorB = 0;
 	colorChoose = Black;
-	texture_C = 0;
-	textureWalk = 0.2;
+
+	transChoose = sb;
 
 	anklex = 0;
 
 	bodyw = 0.2;
+
+	headxd = 0;
+	headyd = 0;
+	headzd = 0;
 
 	limby[0] = 0;
 	limby[1] = 0;
@@ -536,7 +542,7 @@ void walk()
 	case 3:
 		rightHanda[0] += 0.5;
 		leftHanda[0] -= 0.5;
-		bodyyd = leftLega[0] * 1.5 / 30;
+		bodyyd = -rightLega[0] * 1.5 / 30;
 		rightLega[0] += 0.25;
 		//rightLega[0] turn to 15 degree
 		leftLega[0]--;
@@ -552,9 +558,9 @@ void walk()
 	case 4:
 		rightHanda[0] -= 0.5;
 		leftHanda[0] += 0.5;
-		bodyyd = leftLega[0] * 1.5 / 30;
+		bodyyd = -rightLega[0] * 1.5 / 30;
 		rightLega[0] += 0.5;
-		//rightLega[1] turn to 30 degree
+		//rightLega[0] turn to 30 degree
 		rightLega[1] += 0.5;
 		//rightLega[1] turn to 15 degree
 		leftLega[0] ++;
@@ -570,7 +576,14 @@ void walk()
 	case 5:
 		rightHanda[0] -= 0.5;
 		leftHanda[0] += 0.5;
-		bodyyd = rightLega[0] * 1.5 / 30;
+		if (rightLega[0] > 0)
+		{
+			bodyyd = -rightLega[0] * 1.5 / 30;
+		}
+		else
+		{
+			bodyyd = rightLega[0] * 1.5 / 30;
+		}
 		rightLega[0]--;
 		//rightLega[0] turn to -30 degree
 		rightLega[1] += 0.25;
@@ -584,13 +597,7 @@ void walk()
 		}
 		break;
 	}
-
-	textureWalk -= 0.001;
-	if (textureWalk <= 0)
-	{
-		textureWalk = 0.2;
-	}
-
+	cout << step << " " << bodyyd << "\n" << endl;
 	rightHandx[0] = 1;
 	rightHandy[0] = 0;
 	rightHandz[0] = 0;
@@ -900,6 +907,28 @@ void transform()
 	rightHandx[0] = 1;
 	rightHandy[0] = 0;
 	rightHandz[0] = 0;
+	if (transChoose == Shoot_t)
+	{
+		if (cannonyd < 4)
+		{
+			cannonyd += 0.02;
+		}
+		bulletyd[0]--;
+		bulletyd[1]--;
+		bulletyd[2]--;
+		if (bulletyd[0] < -100)
+		{
+			bulletyd[0] = 0;
+		}
+		if (bulletyd[1] < -100)
+		{
+			bulletyd[1] = 10;
+		}
+		if (bulletyd[2] < -100)
+		{
+			bulletyd[2] = 20;
+		}
+	}
 }
 void test()
 {
@@ -915,7 +944,18 @@ void draw_robot(void)
 {
 
 	body();																				//draw body
-
+	if (motivation == Transform)
+	{
+		glPushMatrix();
+		cannon();
+		if (cannonyd >= 4)
+		{
+			bullet(bulletyd[0]);
+			bullet(bulletyd[1]);
+			bullet(bulletyd[2]);
+		}
+		glPopMatrix();
+	}
 	glPushMatrix();
 	glTranslatef(0, bodyside / 2 + headside / 2, 0);									//draw head
 	head();
@@ -1087,6 +1127,13 @@ void menuColor(int selection)
 	glutPostRedisplay();
 }
 
+void menuTransform(int selection)
+{
+	motivation = Transform;
+	transChoose = (trans)selection;
+	standby();
+	glutPostRedisplay();
+}
 void timerFunction(int value)
 {
 	switch (motivation)
@@ -1118,7 +1165,7 @@ void timerFunction(int value)
 }
 int main(int argc, char** argv)
 {
-	int main_menu, action_menu, count_menu, color_menu;
+	int main_menu, action_menu, count_menu, color_menu,transform_menu;
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
@@ -1130,6 +1177,10 @@ int main(int argc, char** argv)
 	glutCreateWindow(argv[0]);
 
 	init();
+
+	transform_menu = glutCreateMenu(menuTransform);
+	glutAddMenuEntry("Transform", Transform);
+	glutAddMenuEntry("Shoot", Shoot_t);
 
 	color_menu = glutCreateMenu(menuColor);
 	glutAddMenuEntry("White", White);
@@ -1146,7 +1197,7 @@ int main(int argc, char** argv)
 	glutAddSubMenu("Change Color", color_menu);
 	glutAddMenuEntry("Shoot", Shoot);
 	glutAddMenuEntry("Destruct", Destruct);
-	glutAddMenuEntry("Transform", Transform);
+	glutAddSubMenu("Transform", transform_menu);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
 	standby();
